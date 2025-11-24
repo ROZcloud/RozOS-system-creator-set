@@ -2,7 +2,7 @@
 ### The set is made for LINUX, you can use it on Windows using WSL
 
 # Setup
-# On Linux, do not enter the command ```wsl --install``` go further!
+# On Linux, do not enter the command ```wsl --install``` and ```wsl`` go further!
 ## On windows install wsl
 ```
 wsl --install
