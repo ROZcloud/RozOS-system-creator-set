@@ -30,7 +30,9 @@ cd RozOS
 ```
 ### Next edit kernel.c
 ### Run 
-```make install```
+```
+make install
+```
 ### once to install the required packages
  
 ### After editing, to get the iso, execute the command:
