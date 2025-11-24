@@ -1,11 +1,10 @@
 # official system development kit
 ### The set is made for LINUX, you can use it on Windows using WSL
-## Do you have Linux?
-- [📱 Windows Setup](#windows)
-- [🐧 Linux Setup](#linux) 
+[Windows Setup](#windows)
+[Linux Setup](#linux) 
 # Setup
-# On Linux, do not enter the command ```wsl --install``` and ```wsl`` go further!
-## if you have Windows start here:
+
+## <a name="windows"><a>if you have Windows start here:
 ## On windows install wsl
 ```
 wsl --install
@@ -17,8 +16,7 @@ wsl
 ```
 ### Fill in the login and password fields
 ### Next
-# <a name="linux"><a>if you have linux and start here if you have windows read from:
-### If you have linux set in wsl continue
+# <a name="linux"><a>If you have windows with wsl or linux continue:
 
 ### Enter in wsl linux command:
 ```
