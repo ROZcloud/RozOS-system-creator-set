@@ -19,7 +19,7 @@ wsl
 ### Next
 # <a name="linux"><a>If you have windows with wsl or linux continue:
 
-### Enter in wsl linux command:
+### Enter in wsl linux or linux command:
 ```
 git clone https://github.com/ROZcloud/RozOS-system-creator-set.git
 ```
