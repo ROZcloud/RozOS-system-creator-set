@@ -3,6 +3,7 @@
 
 # Setup
 # On Linux, do not enter the command ```wsl --install``` and ```wsl`` go further!
+## if you have Windows start here:
 ## On windows install wsl
 ```
 wsl --install
@@ -14,6 +15,8 @@ wsl
 ```
 ### Fill in the login and password fields
 ### Next
+### if you have linux start here:
+
 ### Enter in wsl linux command:
 ```
 git clone https://github.com/ROZcloud/RozOS-system-creator-set.git
