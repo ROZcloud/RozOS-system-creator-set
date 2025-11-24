@@ -1,4 +1,4 @@
-# official system development kit
+# Roz's official system development toolkit
 ### The set is made for LINUX, you can use it on Windows using WSL
 [Windows Setup](#windows)
  
