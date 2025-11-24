@@ -15,7 +15,8 @@ wsl
 ```
 ### Fill in the login and password fields
 ### Next
-# iif you have linux start here if you have windows read from::
+# if you have linux and start here if you have windows read from:
+### If you have linux set in wsl continue
 
 ### Enter in wsl linux command:
 ```
