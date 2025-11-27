@@ -11,7 +11,7 @@ clean:
 	@rm -rf iso
 	@echo Succes!
 install:
-    @sudo apt update
+	@sudo apt update
 	@sudo apt install grub-common grub-pc-bin
 	@sudo apt update
 	@sudo apt install nasm
