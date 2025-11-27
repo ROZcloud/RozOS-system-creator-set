@@ -11,10 +11,15 @@ clean:
 	@rm -rf iso
 	@echo Succes!
 install:
+    @sudo apt update
 	@sudo apt install grub-common grub-pc-bin
+	@sudo apt update
 	@sudo apt install nasm
+	@sudo apt update
 	@sudo apt install xorriso
+	@sudo apt update
 	@sudo apt install qemu-system-x86_64
+	@sudo apt update
 	@echo Succes!
 build:
 	@nasm -f elf boot.s -o boot.o
