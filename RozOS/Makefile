@@ -36,3 +36,4 @@ help:
 	@echo make install all requirements
 	@echo make run-build run builded iso
 	@echo make run to run kernel
+	@.
