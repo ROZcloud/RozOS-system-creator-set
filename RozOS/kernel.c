@@ -10,6 +10,9 @@ typedef unsigned short uint16_t;
 #define KEYBOARD_DATA_PORT 0x60
 #define KEYBOARD_STATUS_PORT 0x64
 
+// Globalna pozycja kursora
+int cursor_position = 0;
+
 // Mapowanie klawiszy
 unsigned char keyboard_map[128] = {
     0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 
@@ -25,24 +28,23 @@ unsigned char keyboard_map[128] = {
 
 void printf(const char* str, uint8_t color) {
     uint16_t* video = (uint16_t*)VIDEO_MEMORY;
-    static int cursor_pos = 0;
     
     for(int i = 0; str[i] != '\0'; i++) {
         if(str[i] == '\n') {
-            cursor_pos = (cursor_pos / SCREEN_WIDTH + 1) * SCREEN_WIDTH;
+            cursor_position = (cursor_position / SCREEN_WIDTH + 1) * SCREEN_WIDTH;
         } else {
-            video[cursor_pos] = (color << 8) | str[i];
-            cursor_pos++;
+            video[cursor_position] = (color << 8) | str[i];
+            cursor_position++;
         }
         
-        if(cursor_pos >= SCREEN_WIDTH * SCREEN_HEIGHT) {
+        if(cursor_position >= SCREEN_WIDTH * SCREEN_HEIGHT) {
             for(int j = 0; j < SCREEN_WIDTH * (SCREEN_HEIGHT - 1); j++) {
                 video[j] = video[j + SCREEN_WIDTH];
             }
             for(int j = SCREEN_WIDTH * (SCREEN_HEIGHT - 1); j < SCREEN_WIDTH * SCREEN_HEIGHT; j++) {
                 video[j] = (color << 8) | ' ';
             }
-            cursor_pos = SCREEN_WIDTH * (SCREEN_HEIGHT - 1);
+            cursor_position = SCREEN_WIDTH * (SCREEN_HEIGHT - 1);
         }
     }
 }
@@ -52,6 +54,23 @@ void clear(uint8_t color) {
     for(int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
         video[i] = (color << 8) | ' ';
     }
+    cursor_position = 0;
+}
+
+// Funkcja do ustawiania kursora
+void set_cursor(int position) {
+    cursor_position = position;
+    if(cursor_position < 0) cursor_position = 0;
+    if(cursor_position >= SCREEN_WIDTH * SCREEN_HEIGHT) 
+        cursor_position = SCREEN_WIDTH * SCREEN_HEIGHT - 1;
+}
+
+// Funkcja do ustawiania kursora na pozycji (x,y)
+void set_cursor_pos(int x, int y) {
+    cursor_position = y * SCREEN_WIDTH + x;
+    if(cursor_position < 0) cursor_position = 0;
+    if(cursor_position >= SCREEN_WIDTH * SCREEN_HEIGHT) 
+        cursor_position = SCREEN_WIDTH * SCREEN_HEIGHT - 1;
 }
 
 // Funkcja do odczytu portu
@@ -64,6 +83,8 @@ uint8_t inb(uint16_t port) {
 // Funkcja jak input() w Pythonie - czeka na Enter
 void input(char* buffer, int max_length, uint8_t color) {
     int pos = 0;
+    uint16_t* video = (uint16_t*)VIDEO_MEMORY;
+    
     printf("> ", color);
     
     while(1) {
@@ -82,7 +103,8 @@ void input(char* buffer, int max_length, uint8_t color) {
                 else if(key == '\b') { // Backspace
                     if(pos > 0) {
                         pos--;
-                        printf("\b \b", color);
+                        cursor_position--; 
+                        video[cursor_position] = (color << 8) | ' '; // Wyczyść znak
                     }
                 }
                 else if(pos < max_length - 1) {
@@ -107,7 +129,7 @@ int strcmp(const char* str1, const char* str2) {
 }
 
 // Funkcja "Press enter to continue"
-void press_enter_to_continue(uint8_t color) {
+void pause(uint8_t color) {
     printf("Press Enter to continue...", color);
     
     while(1) {
@@ -121,63 +143,25 @@ void press_enter_to_continue(uint8_t color) {
     }
 }
 
+void clear_and_print(uint8_t color, const char* str, uint8_t text_color) {
+    clear(color);
+    printf(str, text_color);
+}
+
 void kernel_main(void) {
-    // Wyczyść ekran na niebiesko
+
     clear(0x01);
-    
+    //RozOS COMMANDS
+    //if(strcmp(name, "szymon") == 0)
+    //press_enter_to_continue(0x0Ef;
+    //set_cursor_pos(0, 0); 
+    //clear(0x01);
     printf("=== RozOS Kernel ===\n", 0x1F);
     printf("Kernel loaded successfully!\n", 0x0F);
-    
-    // Test input() jak w Pythonie
-    printf("\nWhat's your name? ", 0x0E);
-    char name[50];
-    input(name, 50, 0x0F);
-    
-    printf("Hello, ", 0x0F);
-    printf(name, 0x0A);
-    printf("!\n", 0x0F);
-    
-    // Test if i porównywanie
-    if(strcmp(name, "szymon") == 0) {
-        printf("Welcome back, Szymon!\n", 0x0D);
-    } else {
-        printf("Nice to meet you!\n", 0x0B);
-    }
-    
-    // Press enter to continue
-    press_enter_to_continue(0x0E);
-    
-    // Czyszczenie i nowy ekran
+    pause(0x0F);
     clear(0x01);
-    printf("=== Interactive Shell ===\n", 0x1F);
-    printf("Type 'exit' to quit\n", 0x0F);
+
+    printf("This is not a full system, just a kit to build a system!\n", 0x1F);
+    while (1);
     
-    // Prosta pętla komend
-    char command[50];
-    while(1) {
-        printf("RozOS> ", 0x0E);
-        input(command, 50, 0x0F);
-        
-        if(strcmp(command, "exit") == 0) {
-            printf("Goodbye!\n", 0x0C);
-            break;
-        }
-        else if(strcmp(command, "help") == 0) {
-            printf("Available commands: help, exit, hello\n", 0x0A);
-        }
-        else if(strcmp(command, "hello") == 0) {
-            printf("Hello from RozOS!\n", 0x0B);
-        }
-        else if(strcmp(command, "") == 0) {
-            // Pusta komenda - nic nie rób
-        }
-        else {
-            printf("Unknown command: ", 0x0C);
-            printf(command, 0x0C);
-            printf("\n", 0x0C);
-        }
-    }
-    
-    printf("Kernel finished.\n", 0x0D);
-    while(1);
 }
